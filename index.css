@@ -1,0 +1,79 @@
+html {
+    color: white;
+    font-family: "SUSE" !important;
+}
+
+body {
+    background-color: #1e1f2a;
+}
+
+label {
+    font-size: 1vw;
+}
+
+button {
+    font-size: 1vw;
+    font-family: "SUSE"
+}
+
+#infoText {
+    font-size: 1vw !important;
+    color: #3c3d4d;
+    opacity: 0;
+    transition-duration: 200ms;
+    transition-property: opacity;
+}
+
+#downloadBtn {
+    transition-duration: 250ms;
+    transition-property: opacity;
+    opacity: 0;
+    visibility: hidden;
+}
+
+#horizontal,
+#vertical {
+    width: 1vw;
+    height: auto;
+}
+
+
+#centerDiv {
+    background-color: #12121d;
+    position: fixed;
+    transform: translate(-50%, -50%);
+    left: 50%;
+    top: 50%;
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: center;
+    width: 80vw;
+    height: 40vw;
+    border-radius: 2vw;
+    box-shadow: #0e0e17 0vw 0vw 3vw;
+}
+
+#centerDiv>* {
+    margin-bottom: 0.7vw;
+}
+
+#graph {
+    background-color: #08080d;
+    border-radius: 1vw;
+    width: 41.25vw;
+    height: 20vw;
+}
+
+#pathInput {
+    color: white;
+    font-size: 1vw;
+    /* margin-right: -5vw; */
+    margin-right: 0vw;
+    width: 14vw;
+    font-family: "SUSE"
+}
+
+#pathInput::file-selector-button {
+    font-family: "SUSE"
+}

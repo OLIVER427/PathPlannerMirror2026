@@ -5,19 +5,37 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="index.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Playwrite+AU+QLD:wght@100..400&family=SUSE:ital,wght@0,100..900;1,100..900&display=swap">
     <title>2026 Path Mirrorer</title>
 </head>
 
 <body>
-    <input type="file" id="pathInput" accept=".path">
+    <!-- <input type="file" id="pathInput" accept=".path">
     <br />
     <input type="checkbox" id="vertical"> Mirror Vertical
     <br />
     <input type="checkbox" id="horizontal" accept=".path"> Mirror Horizontal
     <br />
     <button onclick="processPath()">Convert Path File</button>
+    <p id="input"></p>
+    <br />
+    <div id="result"></div> -->
 
+    <div id="centerDiv">
+        <p id="infoText">Preview of path (no curved lines) before mirroring it</p>
+        <canvas id="graph" width="1650" height="800"></canvas>
+        <span>
+            <input type="file" id="pathInput" accept=".path"><button onclick="processPath()">Convert Path File</button>
+        </span>
+        <label><input type="checkbox" id="vertical" onclick="if (fileLoaded){visualizePath()}">Mirror Vertically</label>
+        <label><input type="checkbox" id="horizontal" onclick="if (fileLoaded){visualizePath()}">Mirror
+            Horizontally</label>
+        <button id="downloadBtn">Download Mirrored Path</button>
 
+    </div>
     <p id="input"></p>
     <br />
     <div id="result"></div>
