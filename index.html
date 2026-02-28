@@ -1,13 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="index.css">
     <title>2026 Path Mirrorer</title>
 </head>
+
 <body>
     <input type="file" id="pathInput" accept=".path">
+    <br />
+    <input type="checkbox" id="vertical"> Mirror Vertical
+    <br />
+    <input type="checkbox" id="horizontal" accept=".path"> Mirror Horizontal
+    <br />
+    <button onclick="processPath()">Convert Path File</button>
+
+
+    <p id="input"></p>
+    <br />
+    <div id="result"></div>
 </body>
 <script src="index.js"></script>
+
 </html>
