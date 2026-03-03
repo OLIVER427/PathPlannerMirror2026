@@ -2,7 +2,7 @@ let pathJSON
 let file
 let reader = new FileReader()
 let fileLoaded = false
-let fileProcessed = false
+let fileVisualized = false
 
 const canvas = document.getElementById("graph");
 const ctx = canvas.getContext("2d");
@@ -19,12 +19,20 @@ document.getElementById("pathInput").addEventListener("change", async () => {
     reader.readAsText(file)
     fileLoaded = true
 
-    setTimeout(() => {
-        visualizePath()
-    }, 100);
+    // setTimeout(() => {
+    //     visualizePath()
+    // }, 100);
 })
 
 function visualizePath() {
+    if (fileVisualized == false && fileLoaded) {
+        document.getElementById("downloadBtn").style.visibility = "visible"
+        document.getElementById("downloadBtn").style.opacity = 1
+        document.getElementById("downloadAllBtn").style.visibility = "visible"
+        document.getElementById("downloadAllBtn").style.opacity = 1
+        document.getElementById("infoText").style.opacity = 1
+        fileVisualized = true
+    }
     ctx.strokeStyle = "white";
     let startX = (JSON.parse(reader.result).waypoints[0].anchor.x) * 100
     let startY = ((1 - (Number(JSON.parse(reader.result).waypoints[0].anchor.y) / 8)) * 8) * 100
@@ -59,11 +67,9 @@ function visualizePath() {
     ctx.moveTo(startX, startY);
     ctx.lineTo(endX, endY);
     ctx.stroke()
-
-
 }
 
-function processPath() {
+function exportPath(downloadAll) {
     //"reader.result" is just the text file
     // let [file] = document.getElementById("pathInput").files
     // let reader = new FileReader()
@@ -94,9 +100,11 @@ function processPath() {
     console.log("CONVERTED END Y: " + pathJSON.waypoints[1].anchor.y)
 
     document.getElementById("result").innerHTML = JSON.stringify(pathJSON)
-    if (fileProcessed == false) {
-        document.getElementById("downloadBtn").style.visibility = "visible"
-        document.getElementById("downloadBtn").style.opacity = 1
-        document.getElementById("infoText").style.opacity = 1
+
+    if (downloadAll) {
+        alert("downloading all paths")
+    } else {
+        alert("not downloading all, but just downloading one")
     }
+
 }

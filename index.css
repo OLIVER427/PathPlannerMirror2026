@@ -11,24 +11,40 @@ label {
     font-size: 1vw;
 }
 
-button {
+button, #pathInput::file-selector-button {
     font-size: 1vw;
-    font-family: "SUSE"
+    font-family: "SUSE";
+    border: 0.2vw solid #8089ff;
+    border-radius: 0.5vw;
+    background-color: #8089ff;
+    color:#181982;
+    transition-duration: 150ms;
+    transition-property: background-color, border;
 }
+button:hover, #pathInput::file-selector-button:hover {
+    cursor:pointer;
+    background-color: #6f76dc;
+    border: 0.2vw solid #6f76dc;
+}
+
 
 #infoText {
     font-size: 1vw !important;
     color: #3c3d4d;
     opacity: 0;
-    transition-duration: 200ms;
+    transition-duration: 150ms;
     transition-property: opacity;
 }
 
-#downloadBtn {
-    transition-duration: 250ms;
-    transition-property: opacity;
+#downloadBtn, #downloadAllBtn {
+    /* transition-duration: 250ms; */
+    transition-property: opacity, background-color, border;
     opacity: 0;
     visibility: hidden;
+}
+
+#downloadAllBtn {
+    margin-left: 1vw;
 }
 
 #horizontal,
@@ -71,9 +87,5 @@ button {
     /* margin-right: -5vw; */
     margin-right: 0vw;
     width: 14vw;
-    font-family: "SUSE"
-}
-
-#pathInput::file-selector-button {
     font-family: "SUSE"
 }
