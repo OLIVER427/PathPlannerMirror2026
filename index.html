@@ -17,7 +17,7 @@
         <p id="infoText">Preview of path (no curved lines) before mirroring it</p>
         <canvas id="graph" width="1650" height="800"></canvas>
         <span>
-            <input type="file" id="pathInput" accept=".path"><button onclick="visualizePath()">Process Path
+            <input type="file" id="pathInput" accept=".path"><button onclick="if (fileLoaded){visualizePath()}">Process Path
                 File</button>
         </span>
         <label>
@@ -27,15 +27,16 @@
             <input type="checkbox" id="horizontal" onclick="if (fileVisualized){visualizePath()}">Mirror
             Horizontally</label>
         <span>
-            <button onclick="exportPath(false)" id="downloadBtn"
+            <button onclick="exportPath()" id="downloadBtn"
                 title="Downloads the currently displayed mirror of the path">Export Mirrored Path</button>
-            <button onclick="exportPath(true)" id="downloadAllBtn"
+            <button onclick="exportAllMirrors()" id="downloadAllBtn"
                 title="Downloads all possible mirrors of the current path.">Export All Mirrors</button>
         </span>
     </div>
     <p id="input"></p>
     <br />
     <div id="result"></div>
+    <a id="hiddenDownloader" style="display: none;"></a>
 </body>
 <script src="index.js"></script>
 

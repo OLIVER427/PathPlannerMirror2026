@@ -1,5 +1,5 @@
 let pathJSON
-let file
+let importedPath
 let reader = new FileReader()
 let fileLoaded = false
 let fileVisualized = false
@@ -15,8 +15,8 @@ ctx.lineWidth = 5
 // ctx.stroke()
 
 document.getElementById("pathInput").addEventListener("change", async () => {
-    [file] = document.getElementById("pathInput").files
-    reader.readAsText(file)
+    [importedPath] = document.getElementById("pathInput").files
+    reader.readAsText(importedPath)
     fileLoaded = true
 
     // setTimeout(() => {
@@ -69,7 +69,7 @@ function visualizePath() {
     ctx.stroke()
 }
 
-function exportPath(downloadAll) {
+function exportPath() {
     //"reader.result" is just the text file
     // let [file] = document.getElementById("pathInput").files
     // let reader = new FileReader()
@@ -85,15 +85,31 @@ function exportPath(downloadAll) {
     console.log("END X: " + pathJSON.waypoints[1].anchor.x)
     console.log("END Y: " + pathJSON.waypoints[1].anchor.y)
 
+    //normal X and Y point flipping
     if (document.getElementById("horizontal").checked) {
         pathJSON.waypoints[0].anchor.x = ((1 - (Number(pathJSON.waypoints[0].anchor.x) / 16.5)) * 16.5)
         pathJSON.waypoints[1].anchor.x = ((1 - (Number(pathJSON.waypoints[1].anchor.x) / 16.5)) * 16.5)
+
+        pathJSON.waypoints[0].nextControl.x = ((1 - (Number(pathJSON.waypoints[0].nextControl.x) / 16.5)) * 16.5)
+        pathJSON.waypoints[1].prevControl.x = ((1 - (Number(pathJSON.waypoints[1].prevControl.x) / 16.5)) * 16.5)
     }
 
     if (document.getElementById("vertical").checked) {
         pathJSON.waypoints[0].anchor.y = ((1 - (Number(pathJSON.waypoints[0].anchor.y) / 8)) * 8)
         pathJSON.waypoints[1].anchor.y = ((1 - (Number(pathJSON.waypoints[1].anchor.y) / 8)) * 8)
+
+        pathJSON.waypoints[0].nextControl.y = ((1 - (Number(pathJSON.waypoints[0].nextControl.y) / 8)) * 8)
+        pathJSON.waypoints[1].prevControl.y = ((1 - (Number(pathJSON.waypoints[1].prevControl.y) / 8)) * 8)
     }
+
+    //now into the ideal starting state rotation craziness
+    // if (document.getElementById("horizontal").checked && document.getElementById("vertical").checked == false) {
+    //     pathJSON.idealStartingState.rotation = Number(pathJSON.idealStartingState.rotation) + 90
+    // } else if (document.getElementById("horizontal").checked && document.getElementById("vertical").checked) {
+    //     pathJSON.idealStartingState.rotation = Number(pathJSON.idealStartingState.rotation) + 180
+    // } else if (document.getElementById("horizontal").checked == false && document.getElementById("vertical").checked) {
+    //     pathJSON.idealStartingState.rotation = Number(pathJSON.idealStartingState.rotation) + 270
+    // }
     console.log("CONVERTED START X: " + pathJSON.waypoints[0].anchor.x)
     console.log("CONVERTED START Y: " + pathJSON.waypoints[0].anchor.y)
     console.log("CONVERTED END X: " + pathJSON.waypoints[1].anchor.x)
@@ -101,10 +117,24 @@ function exportPath(downloadAll) {
 
     document.getElementById("result").innerHTML = JSON.stringify(pathJSON)
 
-    if (downloadAll) {
-        alert("downloading all paths")
-    } else {
-        alert("not downloading all, but just downloading one")
-    }
+    let pathMirror = new File(["\ufeff" + JSON.stringify(pathJSON)], "Mirrored " + importedPath.name);
+    document.getElementById("hiddenDownloader").href = window.URL.createObjectURL(pathMirror);
+    document.getElementById("hiddenDownloader").download = pathMirror.name
+    document.getElementById("hiddenDownloader").click()
+}
 
+function exportAllMirrors() {
+    document.getElementById("vertical").checked = true
+    document.getElementById("horizontal").checked = false
+    exportPath()
+    document.getElementById("vertical").checked = true
+    document.getElementById("horizontal").checked = true
+    exportPath()
+    document.getElementById("vertical").checked = false
+    document.getElementById("horizontal").checked = true
+    exportPath()
+    document.getElementById("vertical").checked = false
+    document.getElementById("horizontal").checked = false
+
+    alert("Mirrored paths have been downloaded. ")
 }
