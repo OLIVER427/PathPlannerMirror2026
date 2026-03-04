@@ -61,7 +61,6 @@ function visualizePath() {
     } else if (startX > 825) {
         ctx.strokeStyle = "#eb3434a4";
     }
-    //NOTE FOR WHEN YOU GET BACK: DO THE STARTY AND ENDY (also do vertical.checked one for graph too)
 
     ctx.beginPath();
     ctx.moveTo(startX, startY);
@@ -79,7 +78,7 @@ function exportPath() {
     //  the Y is  [0, 8]
     pathJSON = JSON.parse(reader.result)
     console.log(pathJSON)
-    document.getElementById("input").innerHTML = JSON.stringify(pathJSON)
+    // document.getElementById("input").innerHTML = JSON.stringify(pathJSON)
     console.log("START X: " + pathJSON.waypoints[0].anchor.x)
     console.log("START Y: " + pathJSON.waypoints[0].anchor.y)
     console.log("END X: " + pathJSON.waypoints[1].anchor.x)
@@ -102,20 +101,36 @@ function exportPath() {
         pathJSON.waypoints[1].prevControl.y = ((1 - (Number(pathJSON.waypoints[1].prevControl.y) / 8)) * 8)
     }
 
-    //now into the ideal starting state rotation craziness
-    // if (document.getElementById("horizontal").checked && document.getElementById("vertical").checked == false) {
-    //     pathJSON.idealStartingState.rotation = Number(pathJSON.idealStartingState.rotation) + 90
-    // } else if (document.getElementById("horizontal").checked && document.getElementById("vertical").checked) {
-    //     pathJSON.idealStartingState.rotation = Number(pathJSON.idealStartingState.rotation) + 180
-    // } else if (document.getElementById("horizontal").checked == false && document.getElementById("vertical").checked) {
-    //     pathJSON.idealStartingState.rotation = Number(pathJSON.idealStartingState.rotation) + 270
-    // }
+    // now into the starting state and end state rotation craziness
+    if (document.getElementById("horizontal").checked && document.getElementById("vertical").checked == false) {
+        pathJSON.idealStartingState.rotation = 180 - Number(pathJSON.idealStartingState.rotation)
+        pathJSON.goalEndState.rotation = 180 - Number(pathJSON.goalEndState.rotation)
+    } else if (document.getElementById("horizontal").checked && document.getElementById("vertical").checked) {
+        pathJSON.idealStartingState.rotation = 180 + Number(pathJSON.idealStartingState.rotation)
+        pathJSON.goalEndState.rotation = 180 + Number(pathJSON.goalEndState.rotation)
+    } else if (document.getElementById("horizontal").checked == false && document.getElementById("vertical").checked) {
+        pathJSON.idealStartingState.rotation = -Number(pathJSON.idealStartingState.rotation)
+        pathJSON.goalEndState.rotation = -Number(pathJSON.goalEndState.rotation)
+    }
+
+    //this is for the mid-path rotations
+    for (let i = 0; i < pathJSON.rotationTargets.length; i++) {
+        if (document.getElementById("horizontal").checked && document.getElementById("vertical").checked == false) {
+            pathJSON.rotationTargets[i].rotationDegrees = 180 - Number(pathJSON.rotationTargets[i].rotationDegrees)
+        } else if (document.getElementById("horizontal").checked && document.getElementById("vertical").checked) {
+            pathJSON.rotationTargets[i].rotationDegrees = 180 + Number(pathJSON.rotationTargets[i].rotationDegrees)
+        } else if (document.getElementById("horizontal").checked == false && document.getElementById("vertical").checked) {
+            pathJSON.rotationTargets[i].rotationDegrees = -Number(pathJSON.rotationTargets[i].rotationDegrees)
+        }
+        console.log("rotation target: " + i)
+    }
+
     console.log("CONVERTED START X: " + pathJSON.waypoints[0].anchor.x)
     console.log("CONVERTED START Y: " + pathJSON.waypoints[0].anchor.y)
     console.log("CONVERTED END X: " + pathJSON.waypoints[1].anchor.x)
     console.log("CONVERTED END Y: " + pathJSON.waypoints[1].anchor.y)
 
-    document.getElementById("result").innerHTML = JSON.stringify(pathJSON)
+    // document.getElementById("result").innerHTML = JSON.stringify(pathJSON)
 
     let pathMirror = new File(["\ufeff" + JSON.stringify(pathJSON)], "Mirrored " + importedPath.name);
     document.getElementById("hiddenDownloader").href = window.URL.createObjectURL(pathMirror);
