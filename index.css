@@ -84,6 +84,7 @@ button:hover, #pathInput::file-selector-button:hover {
 #pathInput {
     color: white;
     font-size: 1vw;
+    font-style: italic;
     /* margin-right: -5vw; */
     margin-right: 0vw;
     width: 14vw;

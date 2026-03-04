@@ -101,6 +101,25 @@ function exportPath() {
         pathJSON.waypoints[1].prevControl.y = ((1 - (Number(pathJSON.waypoints[1].prevControl.y) / 8)) * 8)
     }
 
+    // next stuff is for point towards zones
+    for (let i = 0; i < pathJSON.pointTowardsZones.length; i++) {
+        if (document.getElementById("horizontal").checked) {
+            pathJSON.pointTowardsZones[i].fieldPosition.x = ((1 - (Number(pathJSON.pointTowardsZones[i].fieldPosition.x) / 16.5)) * 16.5)
+        }
+        if (document.getElementById("vertical").checked) {
+            pathJSON.pointTowardsZones[i].fieldPosition.y = ((1 - (Number(pathJSON.pointTowardsZones[i].fieldPosition.y) / 8)) * 8)
+        }
+
+        if (document.getElementById("horizontal").checked && document.getElementById("vertical").checked == false) {
+            pathJSON.pointTowardsZones[i].rotationOffset = Number(pathJSON.pointTowardsZones[i].rotationOffset) * -1
+        } else if (document.getElementById("horizontal").checked && document.getElementById("vertical").checked) {
+            pathJSON.pointTowardsZones[i].rotationOffset = Number(pathJSON.pointTowardsZones[i].rotationOffset)
+        } else if (document.getElementById("horizontal").checked == false && document.getElementById("vertical").checked) {
+            pathJSON.pointTowardsZones[i].rotationOffset = -Number(pathJSON.pointTowardsZones[i].rotationOffset)
+        }
+        console.log("point towards zone: " + i)
+    }
+
     // now into the starting state and end state rotation craziness
     if (document.getElementById("horizontal").checked && document.getElementById("vertical").checked == false) {
         pathJSON.idealStartingState.rotation = 180 - Number(pathJSON.idealStartingState.rotation)
@@ -122,7 +141,7 @@ function exportPath() {
         } else if (document.getElementById("horizontal").checked == false && document.getElementById("vertical").checked) {
             pathJSON.rotationTargets[i].rotationDegrees = -Number(pathJSON.rotationTargets[i].rotationDegrees)
         }
-        console.log("rotation target: " + i)
+        // console.log("rotation target: " + i)
     }
 
     console.log("CONVERTED START X: " + pathJSON.waypoints[0].anchor.x)
