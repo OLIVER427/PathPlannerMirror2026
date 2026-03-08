@@ -15,11 +15,14 @@
 
 <body>
     <div id="centerDiv">
-        <p id="infoText">Preview of path (no curved lines) before mirroring it</p>
+        <p id="infoText">Preview (no curved lines) of path before mirroring it</p>
         <canvas id="graph" width="1650" height="800"></canvas>
         <span>
-            <input type="file" id="pathInput" accept=".path"><button onclick="if (fileLoaded){visualizePath()}">Process Path
-                File</button>
+            <input type="file" id="pathInput" accept=".path">
+            <button title="Finish loading in the .path file" id="visualizeBtn"
+                onclick="if (fileLoaded){visualizePath()}"
+                style="visibility: hidden; width:0vw; font-size: 0vw;">Process Path File</button>
+            <button id="toggleModeBtn" onclick="switchModes()">Mirror Autos Instead</button>
         </span>
         <label>
             <input type="checkbox" id="vertical" onclick="if (fileVisualized){visualizePath()}">
@@ -33,6 +36,44 @@
             <button onclick="exportAllMirrors()" id="downloadAllBtn"
                 title="Downloads all possible mirrors of the current path.">Export All Mirrors</button>
         </span>
+    </div>
+    <div id="centerDiv2" style="visibility: hidden; opacity: 0;">
+        <p id="infoText">(WARNING: The auto mirrorer is experimental and will not work with autos with paths in
+            different corners)</p>
+        <div id="autoList">
+            <pre>
+
+            </pre>
+            <pre>
+
+            </pre>
+        </div>
+        <span>
+            <input type="file" id="autoInput" accept=".auto"><button title="Finish loading in the .auto file"
+                id="visualizeBtn2" onclick="if (autoLoaded){visualizeAuto()}"
+                style="visibility: hidden; width:0vw; font-size: 0vw;">Process Auto File</button><button
+                id="toggleModeBtn" onclick="switchModes()">Mirror Paths Instead</button>
+        </span>
+        <p>(you must have already used the paths in this auto in the path mirrorer and have not renamed
+            them)<br />Select the area you are
+            converting to:</p>
+        <span id="selectArea">
+            <label>
+                <input name="area" type="radio" id="bottomR" onclick="if (autoVisualized){visualizeAuto()}">Bottom
+                Right</label>
+            <label>
+                <input name="area" type="radio" id="bottomL" onclick="if (autoVisualized){visualizeAuto()}">Bottom
+                Left</label>
+            <label>
+                <input name="area" type="radio" id="topR" onclick="if (autoVisualized){visualizeAuto()}">Top
+                Right</label>
+            <label>
+                <input name="area" type="radio" id="topL" onclick="if (autoVisualized){visualizeAuto()}">Top
+                Left</label>
+        </span>
+        <button onclick="exportAuto()" id="exportAuto"
+            title="Exports the auto with all path names modified as they were from the path mirrorer">Export Modified
+            Auto</button>
     </div>
     <p id="input"></p>
     <br />

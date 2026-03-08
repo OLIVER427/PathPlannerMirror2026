@@ -1,8 +1,21 @@
 let pathJSON
+let autoJSON
 let importedPath
+let importedAuto
 let reader = new FileReader()
+let anotherReader = new FileReader()
 let fileLoaded = false
 let fileVisualized = false
+let autoLoaded = false
+let autoVisualized = false
+
+let firstTimeInAutos = true
+
+
+let pathMode = true
+
+let Ystatus
+let Xstatus
 
 const canvas = document.getElementById("graph");
 const ctx = canvas.getContext("2d");
@@ -19,9 +32,23 @@ document.getElementById("pathInput").addEventListener("change", async () => {
     reader.readAsText(importedPath)
     fileLoaded = true
 
+    document.getElementById("visualizeBtn").style.visibility = "visible"
+    document.getElementById("visualizeBtn").style.fontSize = ""
+    document.getElementById("visualizeBtn").style.width = ""
+
     // setTimeout(() => {
     //     visualizePath()
     // }, 100);
+})
+
+document.getElementById("autoInput").addEventListener("change", async () => {
+    [importedAuto] = document.getElementById("autoInput").files
+    anotherReader.readAsText(importedAuto)
+    autoLoaded = true
+
+    document.getElementById("visualizeBtn2").style.visibility = "visible"
+    document.getElementById("visualizeBtn2").style.fontSize = ""
+    document.getElementById("visualizeBtn2").style.width = ""
 })
 
 function visualizePath() {
@@ -30,7 +57,6 @@ function visualizePath() {
         document.getElementById("downloadBtn").style.opacity = 1
         document.getElementById("downloadAllBtn").style.visibility = "visible"
         document.getElementById("downloadAllBtn").style.opacity = 1
-        document.getElementById("infoText").style.opacity = 1
         fileVisualized = true
     }
     ctx.strokeStyle = "white";
@@ -57,9 +83,11 @@ function visualizePath() {
 
     if (startX < 825) {
         ctx.strokeStyle = "#5234eba4";
-        console.log(startX)
-    } else if (startX > 825) {
+        // Xstatus = "Blue"
+        // console.log(startX)
+    } else if (startX >= 825) {
         ctx.strokeStyle = "#eb3434a4";
+        // Xstatus = "Red"
     }
 
     ctx.beginPath();
@@ -149,12 +177,28 @@ function exportPath() {
     console.log("CONVERTED END X: " + pathJSON.waypoints[1].anchor.x)
     console.log("CONVERTED END Y: " + pathJSON.waypoints[1].anchor.y)
 
+    if (pathJSON.waypoints[0].anchor.x < 8.25) {
+        Xstatus = "Left"
+    } else if (pathJSON.waypoints[0].anchor.x >= 8.25) {
+        Xstatus = "Right"
+    }
+    if (pathJSON.waypoints[0].anchor.y < 4 && ((pathJSON.waypoints[1].anchor.y + pathJSON.waypoints[0].anchor.y) / 2) < 4) {
+        Ystatus = "Bottom"
+    } else if (pathJSON.waypoints[0].anchor.y >= 4 && ((pathJSON.waypoints[1].anchor.y + pathJSON.waypoints[0].anchor.y) / 2) >= 4) {
+        Ystatus = "Top"
+    } else {
+        Ystatus = "bro what did you do for this to happen"
+    }
+
+    pathJSON.waypoints[0].linkedName = null
+    pathJSON.waypoints[1].linkedName = null
     // document.getElementById("result").innerHTML = JSON.stringify(pathJSON)
 
-    let pathMirror = new File(["\ufeff" + JSON.stringify(pathJSON)], "Mirrored " + importedPath.name);
+    let pathMirror = new File(["\ufeff" + JSON.stringify(pathJSON)], Ystatus + Xstatus + " " + importedAuto.name);
     document.getElementById("hiddenDownloader").href = window.URL.createObjectURL(pathMirror);
     document.getElementById("hiddenDownloader").download = pathMirror.name
     document.getElementById("hiddenDownloader").click()
+
 }
 
 function exportAllMirrors() {
@@ -170,5 +214,100 @@ function exportAllMirrors() {
     document.getElementById("vertical").checked = false
     document.getElementById("horizontal").checked = false
 
-    alert("Mirrored paths have been downloaded. ")
+    alert(`Mirrored paths have been downloaded.\n \nMake sure to put these in your project's "pathplanner/paths" directory`)
+}
+
+function visualizeAuto() {
+    document.getElementById("exportAuto").style.visibility = "visible"
+    document.getElementById("exportAuto").style.opacity = 1
+
+    document.getElementById("autoList").querySelectorAll("pre")[0].innerHTML = ""
+    document.getElementById("autoList").querySelectorAll("pre")[1].innerHTML = ""
+
+    for (let i = 0; i < (JSON.parse(anotherReader.result).command.data.commands.length); i++) {
+        let checked
+        let textColor
+        console.log(i)
+
+        document.getElementById("autoList").querySelectorAll("pre")[0].innerHTML += `
+        `+ JSON.parse(anotherReader.result).command.data.commands[i].data.pathName + ``
+
+        if (document.getElementById("bottomR").checked) {
+            checked = "BottomRight"
+            textColor = "#eb3434a4"
+        } else if (document.getElementById("bottomL").checked) {
+            checked = "BottomLeft"
+            textColor = "#5234eba4"
+        } else if (document.getElementById("topR").checked) {
+            checked = "TopRight"
+            textColor = "#fb0505a4"
+        } else if (document.getElementById("topL").checked) {
+            checked = "TopLeft"
+            textColor = "#5234eba4"
+        }
+        document.getElementById("autoList").querySelectorAll("pre")[1].innerHTML += `<span style="color:` + textColor + `">
+        `+ checked + " " + JSON.parse(anotherReader.result).command.data.commands[i].data.pathName + `</span>`
+
+    }
+    if (autoVisualized == false) {
+        autoVisualized = true
+    }
+}
+
+function exportAuto() {
+    autoJSON = JSON.parse(anotherReader.result)
+
+    for (let i = 0; i < (autoJSON.command.data.commands.length); i++) {
+        let checked
+
+        if (document.getElementById("bottomR").checked) {
+            checked = "BottomRight"
+        } else if (document.getElementById("bottomL").checked) {
+            checked = "BottomLeft"
+        } else if (document.getElementById("topR").checked) {
+            checked = "TopRight"
+        } else if (document.getElementById("topL").checked) {
+            checked = "TopLeft"
+        }
+
+        autoJSON.command.data.commands[i].data.pathName = checked + " " + autoJSON.command.data.commands[i].data.pathName
+    }
+
+    let autoMirror = new File(["\ufeff" + JSON.stringify(autoJSON)], checked + " " + importedPath.name);
+    document.getElementById("hiddenDownloader").href = window.URL.createObjectURL(pathMirror);
+    document.getElementById("hiddenDownloader").download = pathMirror.name
+    document.getElementById("hiddenDownloader").click()
+}
+
+let modeCooldown = false
+function switchModes() {
+    if (modeCooldown == false) {
+        pathMode = !pathMode
+
+        if (pathMode) {
+            document.getElementById("centerDiv2").style.opacity = 0
+            setTimeout(() => {
+                document.getElementById("centerDiv2").style.visibility = "hidden"
+                document.getElementById("centerDiv2").style.top = "1000%"
+            }, 200);
+            document.getElementById("centerDiv").style.visibility = "visible"
+            document.getElementById("centerDiv").style.opacity = 1
+        } else if (pathMode == false) {
+            document.getElementById("centerDiv").style.opacity = 0
+            setTimeout(() => {
+                document.getElementById("centerDiv").style.visibility = "hidden"
+            }, 200);
+            document.getElementById("centerDiv2").style.top = "50%"
+            document.getElementById("centerDiv2").style.visibility = "visible"
+            document.getElementById("centerDiv2").style.opacity = 1
+            if (firstTimeInAutos) {
+                alert('This is EXTREMELY experimental and will not work on most autos. If you are using it and think MAYBE it will work, make sure the paths you are using with it are in the same corner and have already been exported from the path mirrorer (this literally just renames the paths in the auto file for you.)') //basically its for lazy people
+                firstTimeInAutos = false
+            }
+        }
+        modeCooldown = true
+        setTimeout(() => {
+            modeCooldown = false
+        }, 1000);
+    }
 }
