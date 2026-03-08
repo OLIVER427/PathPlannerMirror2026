@@ -194,7 +194,7 @@ function exportPath() {
     pathJSON.waypoints[1].linkedName = null
     // document.getElementById("result").innerHTML = JSON.stringify(pathJSON)
 
-    let pathMirror = new File(["\ufeff" + JSON.stringify(pathJSON)], Ystatus + Xstatus + " " + importedAuto.name);
+    let pathMirror = new File(["\ufeff" + JSON.stringify(pathJSON)], Ystatus + Xstatus + " " + importedPath.name);
     document.getElementById("hiddenDownloader").href = window.URL.createObjectURL(pathMirror);
     document.getElementById("hiddenDownloader").download = pathMirror.name
     document.getElementById("hiddenDownloader").click()
@@ -256,9 +256,9 @@ function visualizeAuto() {
 
 function exportAuto() {
     autoJSON = JSON.parse(anotherReader.result)
+    let checked
 
     for (let i = 0; i < (autoJSON.command.data.commands.length); i++) {
-        let checked
 
         if (document.getElementById("bottomR").checked) {
             checked = "BottomRight"
@@ -273,9 +273,9 @@ function exportAuto() {
         autoJSON.command.data.commands[i].data.pathName = checked + " " + autoJSON.command.data.commands[i].data.pathName
     }
 
-    let autoMirror = new File(["\ufeff" + JSON.stringify(autoJSON)], checked + " " + importedPath.name);
-    document.getElementById("hiddenDownloader").href = window.URL.createObjectURL(pathMirror);
-    document.getElementById("hiddenDownloader").download = pathMirror.name
+    let autoMirror = new File(["\ufeff" + JSON.stringify(autoJSON)], checked + " " + importedAuto.name);
+    document.getElementById("hiddenDownloader").href = window.URL.createObjectURL(autoMirror);
+    document.getElementById("hiddenDownloader").download = autoMirror.name
     document.getElementById("hiddenDownloader").click()
 }
 
