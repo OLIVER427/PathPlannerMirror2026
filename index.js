@@ -80,15 +80,23 @@ function visualizePath() {
         startY = (JSON.parse(reader.result).waypoints[0].anchor.y) * 100
         endY = (JSON.parse(reader.result).waypoints[1].anchor.y) * 100
     }
-
-    if (startX < 825) {
+    let detectOrientY = "error"
+    let detectOrientX = "error"
+    if (startX < 825 && ((startX + endX) / 2) < 825) {
         ctx.strokeStyle = "#5234eba4";
-        // Xstatus = "Blue"
-        // console.log(startX)
-    } else if (startX >= 825) {
+        detectOrientX = "Left"
+    } else if (startX >= 825 && ((startX + endX) / 2) >= 825) {
         ctx.strokeStyle = "#eb3434a4";
-        // Xstatus = "Red"
+        detectOrientX = "Right"
     }
+
+    if (startY < 400 && ((startY + endY) / 2) < 400) {
+        detectOrientY = "Top"
+    } else if (startY >= 400 && ((startY + endY) / 2) >= 400) {
+        detectOrientY = "Bottom"
+    }
+    console.log(detectOrientY + " " + detectOrientX)
+    document.getElementById("infoText").querySelector("span").innerHTML = "(Current Detected Orientation: " + detectOrientY + " " + detectOrientX + ")"
 
     ctx.beginPath();
     ctx.moveTo(startX, startY);
