@@ -1,5 +1,6 @@
 # Info!
-yes info. please read.
+First of all, make sure you have [PathPlanner](https://github.com/mjansen4857/pathplanner/releases/) downloaded.
+also if this doesn't work for you, I have absolutely no idea why as I have used this multiple times including in the middle of a competition and it's worked perfectly. Feel free to report to me what is going wrong though and I may be able to fix it!
 
 ## How to use
 Hopefully this is easy enough to figure out how to use, but I can explain quick details anyway.
@@ -14,6 +15,8 @@ if you are using the auto mirroring part, its a pretty similar process.
 
 ## Specifications (THIS IS PRETTY IMPORTANT)
 The way the site calculates where the path is in the path mirrorer, (for the naming specifically) is that it detects which corner has a at least 50% of the line inside it.
+
+Quick note about the auto mirrorer: This is EXTREMELY experimental and will not work on most autos. If you are using it and think MAYBE it will work, make sure the paths you are using with it are in the same corner and have already been exported from the path mirrorer (this literally just renames the paths in the auto file for you.)
 
 If you want to use the auto mirrorer, make sure that you've already used the paths in the path mirrorer because literally the ONLY thing that the auto mirror does is rename the path names inside of it to have a prefix that fits the naming of the path mirror (for example, "TopRight New Auto").
 
